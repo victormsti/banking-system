@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.bankingsystem.dao.CustomerRepository;
-import com.example.bankingsystem.entity.Account;
 import com.example.bankingsystem.entity.Customer;
 
 @Service

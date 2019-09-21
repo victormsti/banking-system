@@ -74,6 +74,10 @@ public class CustomerRestControllerTest extends AbstractTest{
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 		MockHttpServletResponse response = result.getResponse();
 
+		
+		String expectedJson = this.mapToJson(customer);
+		String outputInJson = result.getResponse().getContentAsString();
+		assertEquals(expectedJson, outputInJson);
 		assertEquals(HttpStatus.OK.value(), response.getStatus());
 
 	}
@@ -105,9 +109,10 @@ public class CustomerRestControllerTest extends AbstractTest{
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 		MockHttpServletResponse response = result.getResponse();
 
-		String outputInJson = response.getContentAsString();
+		String expectedJson = mapToJson(customers);
+		String outputInJson = result.getResponse().getContentAsString();
 
-		assertNotEquals(outputInJson, inputInJson);
+		assertNotEquals(expectedJson, outputInJson);
 		assertEquals(HttpStatus.OK.value(), response.getStatus());
 	}
 	
@@ -156,8 +161,7 @@ public class CustomerRestControllerTest extends AbstractTest{
 		account.setAccountType(AccountType.singleAccount);
 		accounts.add(account);
 		
-		customers.add(customer);
-
+		customer.setAccounts(accounts);
 
 		Mockito.when(customerService.findAll()).thenReturn(customers);
 		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(URI).
@@ -168,7 +172,7 @@ public class CustomerRestControllerTest extends AbstractTest{
 		
 		String expectedJson = mapToJson(customers);
 		String outputInJson = result.getResponse().getContentAsString();
-		
+		assertEquals(expectedJson, outputInJson);
 		assertEquals(HttpStatus.OK.value(), response.getStatus());
 	}
 }

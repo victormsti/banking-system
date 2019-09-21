@@ -29,61 +29,62 @@ import com.example.bankingsystem.entity.Account;
 import com.example.bankingsystem.entity.AccountType;
 import com.example.bankingsystem.entity.Customer;
 import com.example.bankingsystem.service.AccountService;
-import com.example.bankingsystem.service.CustomerService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = BankingSystemApplication.class)
 @AutoConfigureMockMvc
-public class AccountRestControllerTest extends AbstractTest{
+public class AccountRestControllerTest extends AbstractTest {
 
 	@Autowired
 	private MockMvc mockMvc;
 
 	@MockBean
 	private AccountService accountService;
-	
+
 	String URI;
 	Account account;
+	Customer customer;
 	List<Account> accounts;
+	List<Customer> customers;
 	
 	@Test
 	public void testCreateSingleAccount() throws Exception {
-		URI = "/api/account/single_account/create";
-
+		URI = "/api/account/single_account";
+		accounts = new ArrayList<Account>();
 		account = new Account();
 		account.setAccountBalance(new BigDecimal(5000));
 		account.setInterestRate(new BigDecimal(0.10));
 		account.setLastAccess(new Date());
 		account.setAccountType(AccountType.singleAccount);
-
-		accounts = new ArrayList<Account>();
 		accounts.add(account);
 
-		String inputInJson = mapToJson(account);
+		customer = new Customer();
+		customer.setId(1);
+		customer.setName("Victor");
+		customer.setAddress("Unknown Avenue");
+		customer.setAccounts(accounts);
+		
+		String inputInJson = mapToJson(customer);
 		Mockito.when(accountService.save(Mockito.any(Account.class))).thenReturn(account);
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.post(URI).
-				accept(MediaType.APPLICATION_JSON)
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.post(URI).accept(MediaType.APPLICATION_JSON)
 				.content(inputInJson).contentType(MediaType.APPLICATION_JSON);
 
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 		MockHttpServletResponse response = result.getResponse();
-
+		
+		inputInJson = mapToJson(account);
+		String outputInJson = result.getResponse().getContentAsString();
+		assertEquals(inputInJson, outputInJson);
 		assertEquals(HttpStatus.OK.value(), response.getStatus());
 
 	}
-	
+
 	@Test
 	public void testCreateJointAccount() throws Exception {
-		URI = "/api/account/joint_account/create";
-		
+		URI = "/api/account/joint_account";
+
 		accounts = new ArrayList<Account>();
-		
-		account = new Account();
-		account.setAccountBalance(new BigDecimal(5000));
-		account.setInterestRate(new BigDecimal(0.10));
-		account.setLastAccess(new Date());
-		account.setAccountType(AccountType.jointAccount);
-		accounts.add(account);
+		customers = new ArrayList<Customer>();
 		
 		account = new Account();
 		account.setAccountBalance(new BigDecimal(5000));
@@ -92,40 +93,56 @@ public class AccountRestControllerTest extends AbstractTest{
 		account.setAccountType(AccountType.jointAccount);
 		accounts.add(account);
 
-		String inputInJson = mapToJson(accounts);
+		customer = new Customer();
+		customer.setId(1);
+		customer.setName("Victor");
+		customer.setAddress("Unknown Avenue");
+		customer.setAccounts(accounts);
+		customers.add(customer);
+		
+		customer = new Customer();
+		customer.setId(2);
+		customer.setName("Mary");
+		customer.setAddress("Avenue X");
+		customer.setAccounts(accounts);
+		customers.add(customer);
+		
+		String inputInJson = mapToJson(customers);
 		Mockito.when(accountService.save(Mockito.any(Account.class))).thenReturn(account);
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.post(URI).
-				accept(MediaType.APPLICATION_JSON)
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.post(URI).accept(MediaType.APPLICATION_JSON)
 				.content(inputInJson).contentType(MediaType.APPLICATION_JSON);
 
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 		MockHttpServletResponse response = result.getResponse();
 
+		inputInJson = mapToJson(account);
+		String outputInJson = result.getResponse().getContentAsString();
+		assertEquals(inputInJson, outputInJson);
 		assertEquals(HttpStatus.OK.value(), response.getStatus());
 
 	}
-	
+
 	@Test
 	public void testFindAll() throws Exception {
 		URI = "/api/account";
-		
+
 		accounts = new ArrayList<Account>();
 		account = new Account();
 		account.setAccountBalance(new BigDecimal(5000));
 		account.setInterestRate(new BigDecimal(0.10));
 		account.setLastAccess(new Date());
 		account.setAccountType(AccountType.singleAccount);
-		
+
 		accounts = new ArrayList<Account>();
 		accounts.add(account);
-		
+
 		account = new Account();
 		account.setAccountBalance(new BigDecimal(10000));
 		account.setInterestRate(new BigDecimal(0.12));
 		account.setLastAccess(new Date());
 		account.setAccountType(AccountType.jointAccount);
 		accounts.add(account);
-		
+
 		account = new Account();
 		account.setAccountBalance(new BigDecimal(12000));
 		account.setInterestRate(new BigDecimal(0.14));
@@ -134,12 +151,14 @@ public class AccountRestControllerTest extends AbstractTest{
 		accounts.add(account);
 
 		Mockito.when(accountService.findAll()).thenReturn(accounts);
-		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(URI).
-				accept(MediaType.APPLICATION_JSON);
+		RequestBuilder requestBuilder = MockMvcRequestBuilders.get(URI).accept(MediaType.APPLICATION_JSON);
 
 		MvcResult result = mockMvc.perform(requestBuilder).andReturn();
 		MockHttpServletResponse response = result.getResponse();
-		
+
+		String expectedJson = mapToJson(accounts);
+		String outputInJson = result.getResponse().getContentAsString();
+		assertEquals(expectedJson, outputInJson);
 		assertEquals(HttpStatus.OK.value(), response.getStatus());
 	}
 

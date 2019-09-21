@@ -13,6 +13,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name = "account", schema = "public")
 public class Account {
@@ -41,6 +43,7 @@ public class Account {
 	private BigDecimal interestRate;
 
 	@Column(name = "last_access")
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd@HH:mm:ss.SSSZ")
 	private Date lastAccess;
 
 	@OneToOne(fetch = FetchType.EAGER)

@@ -8,12 +8,12 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.bankingsystem.entity.Account;
-import com.example.bankingsystem.entity.AccountType;
+import com.example.bankingsystem.entity.Customer;
 import com.example.bankingsystem.service.AccountService;
+import com.example.bankingsystem.service.CustomerService;
 
 @RestController
 @RequestMapping("/api/account")
@@ -22,30 +22,32 @@ public class AccountRestController {
 	@Autowired
 	AccountService accountService;
 
+	@Autowired
+	CustomerService customerService;
+	
 	@CrossOrigin
-	@RequestMapping(value = "single_account/create", method = RequestMethod.POST, 
+	@RequestMapping(value = "single_account", method = RequestMethod.POST, 
 			consumes = MediaType.APPLICATION_JSON_VALUE, 
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public Account createSingleAccount(@RequestBody Account account) {
+	public Account createSingleAccount(@RequestBody Customer customer) {
 
-		account.setAccountType(AccountType.singleAccount);
-		accountService.save(account);
+		
+		customerService.save(customer);
 
-		return account;
+		return customer.getAccounts().get(0);
 
 	}
 	
 	@CrossOrigin
-	@RequestMapping(value = "joint_account/create", method = RequestMethod.POST, 
+	@RequestMapping(value = "joint_account", method = RequestMethod.POST, 
 			consumes = MediaType.APPLICATION_JSON_VALUE, 
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public List<Account> createJointAccount(@RequestBody List<Account> accounts) {
+	public Account createJointAccount(@RequestBody List<Customer> customers) {
 
-		for (Account account : accounts) {
-			account.setAccountType(AccountType.jointAccount);
-			accountService.save(account);
+		for (Customer customer: customers) {
+			customerService.save(customer);
 		}
-		return accounts;
+		return customers.get(0).getAccounts().get(0);
 
 	}
 	
@@ -62,11 +64,5 @@ public class AccountRestController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Account> findAll(){
 		return accountService.findAll();
-	}
-	
-	@RequestMapping(value = "/{id}", method = RequestMethod.GET,
-			produces = MediaType.APPLICATION_JSON_VALUE)
-	public Account findById(@RequestParam(name = "id", required = true) String id){
-		return accountService.findById(Integer.parseInt(id));
 	}
 }
