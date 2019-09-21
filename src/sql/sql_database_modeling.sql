@@ -1,3 +1,9 @@
+--Customers can open one or more banking accounts
+--Customers can perform transactions to decrease or increase their account balances
+--Customers can have joint accounts with other customers
+--Customers can make transfers between accounts they own or accounts of other customers
+--Accounts can gain interest over a given time
+
 create database banking_application;
 
 drop table customer cascade; 
@@ -22,8 +28,8 @@ type VARCHAR(50) NOT NULL
 create table account(
 id_account SERIAL PRIMARY KEY,
 id_account_type INT NOT NULL,
-account_balance INT NOT NULL,
-interest_rate INT NOT NULL,
+account_balance NUMERIC NOT NULL,
+interest_rate NUMERIC NOT NULL,
 last_access TIMESTAMP NOT NULL,
 FOREIGN KEY (id_account_type) REFERENCES account_type (id_account_type)
 );
@@ -45,9 +51,10 @@ create table transaction(
 id_transaction SERIAL PRIMARY KEY,
 id_transaction_type INT NOT NULL,
 id_account INT NOT NULL,
-value DECIMAL NOT NULL,
+value NUMERIC NOT NULL,
 transaction_date TIMESTAMP NOT NULL,
-FOREIGN KEY (id_transaction_type) REFERENCES transaction_type (id_transaction_type)
+FOREIGN KEY (id_transaction_type) REFERENCES transaction_type (id_transaction_type),
+FOREIGN KEY (id_account) REFERENCES account (id_account)
 );
 
 --Populate initial values
