@@ -21,12 +21,14 @@ public class Transaction {
 
 	}
 
-	public Transaction(BigDecimal value, Date transactionDate, TransactionType transactionType, Account account) {
+	public Transaction(BigDecimal value, Date transactionDate, TransactionType transactionType, Account accountOrigin,
+			Account accountDestiny) {
 		super();
 		this.value = value;
 		this.transactionDate = transactionDate;
 		this.transactionType = transactionType;
-		this.account = account;
+		this.accountOrigin = accountOrigin;
+		this.accountDestiny = accountDestiny;
 	}
 
 	@Id
@@ -45,8 +47,13 @@ public class Transaction {
 	private TransactionType transactionType;
 
 	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_account")
-	private Account account;
+	@JoinColumn(name = "id_account_origin")
+	private Account accountOrigin;
+	
+	@OneToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_account_destiny")
+	private Account accountDestiny;
+	
 
 	public int getId() {
 		return id;
@@ -80,18 +87,27 @@ public class Transaction {
 		this.transactionType = transactionType;
 	}
 
-	public Account getAccount() {
-		return account;
+	public Account getAccountOrigin() {
+		return accountOrigin;
 	}
 
-	public void setAccount(Account account) {
-		this.account = account;
+	public void setAccountOrigin(Account account) {
+		this.accountOrigin = account;
+	}
+
+	public Account getAccountDestiny() {
+		return accountDestiny;
+	}
+
+	public void setAccountDestiny(Account accountDestiny) {
+		this.accountDestiny = accountDestiny;
 	}
 
 	@Override
 	public String toString() {
 		return "Transaction [id=" + id + ", value=" + value + ", transactionDate=" + transactionDate
-				+ ", transactionType=" + transactionType + ", account=" + account + "]";
+				+ ", transactionType=" + transactionType + ", accountOrigin=" + accountOrigin + ", accountDestiny="
+				+ accountDestiny + "]";
 	}
 
 }

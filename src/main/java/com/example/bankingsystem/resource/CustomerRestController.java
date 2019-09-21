@@ -31,13 +31,10 @@ public class CustomerRestController {
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public Customer createCustomer(@RequestBody Customer customer) {
 
-		customerService.save(customer);
-
-		return customer;
-
+		 return customerService.save(customer);
 	}
 	@CrossOrigin
-	@RequestMapping(value = "/update", method = RequestMethod.PUT,
+	@RequestMapping(value = "/update", method = RequestMethod.POST,
 			consumes = MediaType.APPLICATION_JSON_VALUE, 
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public Customer updateCustomer(Customer customer) {

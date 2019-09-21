@@ -50,11 +50,13 @@ type VARCHAR(50) NOT NULL
 create table transaction(
 id_transaction SERIAL PRIMARY KEY,
 id_transaction_type INT NOT NULL,
-id_account INT NOT NULL,
+id_account_origin INT NOT NULL,
+id_account_destiny INT NOT NULL,
 value NUMERIC NOT NULL,
 transaction_date TIMESTAMP NOT NULL,
 FOREIGN KEY (id_transaction_type) REFERENCES transaction_type (id_transaction_type),
-FOREIGN KEY (id_account) REFERENCES account (id_account)
+FOREIGN KEY (id_account_origin) REFERENCES account (id_account),
+FOREIGN KEY (id_account_destiny) REFERENCES account (id_account)
 );
 
 --Populate initial values

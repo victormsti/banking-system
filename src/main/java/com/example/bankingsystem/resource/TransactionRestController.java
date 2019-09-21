@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.bankingsystem.entity.Account;
-import com.example.bankingsystem.entity.Customer;
 import com.example.bankingsystem.entity.Transaction;
 import com.example.bankingsystem.entity.TransactionType;
 import com.example.bankingsystem.service.AccountService;
@@ -38,43 +37,21 @@ public class TransactionRestController {
 	@RequestMapping(value = "/saving/create", method = RequestMethod.POST, 
 			consumes = MediaType.APPLICATION_JSON_VALUE, 
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public Transaction savingTransaction(@RequestBody Account account, BigDecimal value) {
+	public Transaction savingTransaction(@RequestBody Transaction transaction) {
 		
-		Transaction transaction = new Transaction();
-		transaction.setAccount(account);
-		transaction.setTransactionType(TransactionType.saving);
-		transaction.setValue(value);
-		transaction.setTransactionDate(new Date());
-		
-		account.setAccountBalance(account.getAccountBalance().add(value));
-		accountService.save(account);
-		
-		transactionService.save(transaction);
-
-		return transaction;
+		return transactionService.save(transaction);
 	}
 	
 	@CrossOrigin
 	@RequestMapping(value = "/transfer/create", method = RequestMethod.POST, 
 			consumes = MediaType.APPLICATION_JSON_VALUE, 
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public Transaction transferTransaction(@RequestBody Account originAccount, Account destinyAccount, 
-			BigDecimal value) {
-		
-		Transaction transaction = new Transaction();
-		transaction.setAccount(originAccount);
-		transaction.setTransactionType(TransactionType.transfer);
-		transaction.setValue(value);
-		transaction.setTransactionDate(new Date());
-		
-		originAccount.setAccountBalance(originAccount.getAccountBalance().add(value));
-		accountService.save(originAccount);
+	public Transaction transferTransaction(@RequestBody Transaction transaction) {
 		
 		transactionService.save(transaction);
 
 		return transaction;
 	}
-	
 	
 	@RequestMapping(method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
@@ -84,7 +61,7 @@ public class TransactionRestController {
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
-	public Transaction checkAccount(@RequestParam(name = "id", required = true) String id){
+	public Transaction checkTransaction(@RequestParam(name = "id", required = true) String id){
 		return transactionService.findById(Integer.parseInt(id));
 	}
 }
