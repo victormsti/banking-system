@@ -10,6 +10,8 @@ public interface AccountService {
 	
 	public List<Account> findAll();
 	
-	public void save (Account account);
+	public Account save (Account account);
+	
+	public void delete (Account account);
 	
 }

@@ -11,12 +11,16 @@ import javax.persistence.Table;
 @Table(name = "account_type", schema = "public")
 public class AccountType {
 
+	public static AccountType jointAccount = new AccountType(1,"Joint account");
+	public static AccountType singleAccount = new AccountType(2,"Single account");
+	
 	public AccountType() {
 
 	}
 
-	public AccountType(String type) {
+	public AccountType(int id, String type) {
 		super();
+		this.id = id;
 		this.type = type;
 	}
 

@@ -43,7 +43,9 @@ public class Customer {
 	@ManyToMany(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST, CascadeType.MERGE,
 
 	})
-	@JoinTable(name = "customer_account", schema = "public", joinColumns = @JoinColumn(name = "id_customer"), inverseJoinColumns = @JoinColumn(name = "id_account"))
+	@JoinTable(name = "customer_account", schema = "public", 
+	joinColumns = @JoinColumn(name = "id_customer"), 
+	inverseJoinColumns = @JoinColumn(name = "id_account"))
 	private List<Account> accounts;
 
 	public int getId() {

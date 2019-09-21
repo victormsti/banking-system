@@ -10,6 +10,6 @@ public interface TransactionService {
 
 	public List<Transaction> findAll();
 
-	public void save(Transaction transaction);
+	public Transaction save(Transaction transaction);
 
 }
