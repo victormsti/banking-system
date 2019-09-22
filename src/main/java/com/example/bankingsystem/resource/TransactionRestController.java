@@ -58,6 +58,7 @@ public class TransactionRestController {
 		return transaction;
 	}
 	
+	@CrossOrigin
 	@RequestMapping(value = "check/{id}", method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public Transaction checkTransaction(@PathVariable String id){

@@ -42,12 +42,14 @@ public class CustomerRestController {
 		return customerService.save(customer);
 	}
 	
+	@CrossOrigin
 	@RequestMapping(method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Customer> findAll(){
 		return customerService.findAll();
 	}
 	
+	@CrossOrigin
 	@RequestMapping(value = "/{id}", method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public Customer findById(@RequestParam(name = "id", required = true) String id){

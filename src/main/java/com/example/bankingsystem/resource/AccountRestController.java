@@ -60,6 +60,7 @@ public class AccountRestController {
 		return accountService.save(account);
 	}
 	
+	@CrossOrigin
 	@RequestMapping(method = RequestMethod.GET,
 			produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<Account> findAll(){
